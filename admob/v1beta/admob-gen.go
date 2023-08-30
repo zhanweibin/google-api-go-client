@@ -48,6 +48,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -2865,7 +2866,7 @@ func (c *AccountsMediationReportGenerateCall) doRequest(alt string) (*http.Respo
 // a response was returned at all) in error.(*googleapi.Error).Header.
 // Use googleapi.IsNotModified to check whether the returned error was
 // because http.StatusNotModified was returned.
-func (c *AccountsMediationReportGenerateCall) Do(opts ...googleapi.CallOption) (*GenerateMediationReportResponse, error) {
+func (c *AccountsMediationReportGenerateCall) Do(opts ...googleapi.CallOption) ([]byte, error) {
 	gensupport.SetOptions(c.urlParams_, opts...)
 	res, err := c.doRequest("json")
 	if res != nil && res.StatusCode == http.StatusNotModified {
@@ -2884,17 +2885,23 @@ func (c *AccountsMediationReportGenerateCall) Do(opts ...googleapi.CallOption) (
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, gensupport.WrapError(err)
 	}
-	ret := &GenerateMediationReportResponse{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := gensupport.DecodeResponse(target, res); err != nil {
-		return nil, err
-	}
-	return ret, nil
+
+	body, err := ioutil.ReadAll(res.Body)
+	return body, err
+
+
+	//ret := &GenerateMediationReportResponse{
+	//	ServerResponse: googleapi.ServerResponse{
+	//		Header:         res.Header,
+	//		HTTPStatusCode: res.StatusCode,
+	//	},
+	//}
+	//target := &ret
+	//if err := gensupport.DecodeResponse(target, res); err != nil {
+	//	return nil, err
+	//}
+	//return ret, nil
+
 	// {
 	//   "description": "Generates an AdMob mediation report based on the provided report specification. Returns result of a server-side streaming RPC. The result is returned in a sequence of responses.",
 	//   "flatPath": "v1beta/accounts/{accountsId}/mediationReport:generate",
